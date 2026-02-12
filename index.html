@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOR HARITSA PUTRI AZZAHRA 🌸</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500;700&display=swap');
+
+        :root {
+            --soft-pink: #ffcad4;
+            --deep-rose: #f4acb7;
+            --cream: #fff1e6;
+            --dark-text: #4a4e69;
+        }
+
+        * { scroll-behavior: smooth; box-sizing: border-box; }
+
+        body {
+            background-color: var(--cream);
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--dark-text);
+        }
+
+        /* Flower Falling Animation */
+        .flower {
+            position: fixed;
+            top: -10%;
+            z-index: 999;
+            user-select: none;
+            cursor: pointer;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px;
+            border-radius: 50px 0 50px 0;
+            border: 2px solid var(--deep-rose);
+            box-shadow: 0 15px 35px rgba(244, 172, 183, 0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 { 
+            font-family: 'Dancing Script', cursive; 
+            color: #d62828; 
+            font-size: clamp(2.5rem, 8vw, 3.5rem); 
+            margin-bottom: 10px;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--deep-rose), #ff8fa3);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            margin: 10px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(244, 172, 183, 0.4);
+            display: inline-block;
+        }
+
+        .btn-custom:hover { transform: scale(1.05); }
+
+        #console {
+            background: #1a1a2e;
+            color: #a2d2ff;
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            border-radius: 15px;
+            text-align: left;
+            font-size: 13px;
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+            border-left: 5px solid var(--deep-rose);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .loading-bar-container {
+            width: 100%; height: 10px; background: #eee; border-radius: 5px; margin-top: 15px; overflow: hidden; display: none;
+        }
+
+        #progress-fill { height: 100%; width: 0%; background: var(--deep-rose); transition: width 0.4s; }
+        
+        .music-control {
+            position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+            background: white; width: 45px; height: 45px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+    <div class="music-control" onclick="toggleMusic()">🎵</div>
+
+    <section class="section">
+        <div class="glass-card">
+            <h1>Halo, Calon Sarjana!</h1>
+            <p>Spesial untuk <strong>Haritsa Putri Azzahra</strong></p>
+            <p>Scroll pelan-pelan ya, ada kejutan di bawah...</p>
+            <div style="margin-top: 25px; color: var(--deep-rose); font-weight: bold; animation: bounce 2s infinite;">▼ SCROLL TERUS ▼</div>
+        </div>
+    </section>
+
+    <section class="section" style="background: linear-gradient(180deg, var(--cream), var(--soft-pink));">
+        <div class="glass-card">
+            <h2>Eits, Verifikasi Dulu!</h2>
+            <p>Jawab jujur: Tadi pas Sempro, lebih banyak jawab "Terima kasih sarannya" atau "Mohon maaf pak, saya khilaf"?</p>
+            <button class="btn-custom" onclick="playMusic(); alert('BOHONG BANGET! Tadi kan kamu gemeteran.')">Sangat Menguasai</button>
+            <button class="btn-custom" onclick="playMusic(); lanjut()">Pasrah Sama Takdir</button>
+        </div>
+    </section>
+
+    <section id="loading-sec" class="section" style="display:none; background: var(--soft-pink);">
+        <div class="glass-card">
+            <h2 id="status">Menyiapkan Berkas Revisi...</h2>
+            <div class="loading-bar-container" id="bar-container">
+                <div id="progress-fill"></div>
+            </div>
+            <div id="console"></div>
+        </div>
+    </section>
+
+    <script>
+        const audio = document.getElementById('bgm');
+
+        // Fungsi putar musik saat tombol diklik
+        function playMusic() {
+            audio.play().catch(e => console.log("Musik butuh interaksi user"));
+        }
+
+        function toggleMusic() {
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+
+        function lanjut() {
+            document.getElementById('loading-sec').style.display = 'flex';
+            document.getElementById('bar-container').style.display = 'block';
+            document.getElementById('loading-sec').scrollIntoView({ behavior: 'smooth' });
+            startJailLoading();
+        }
+
+        async function startJailLoading() {
+            const consoleBox = document.getElementById('console');
+            const status = document.getElementById('status');
+            const fill = document.getElementById('progress-fill');
+            consoleBox.style.display = 'block';
+            
+            const logs = [
+                "> Accessing Haritsa_Proposal_Final_v12.pdf...",
+                "> Error: File terlalu banyak coretan merah.",
+                "> Menganalisis detak jantung saat ditanya dosen...",
+                "> Menghubungi percetakan toga terdekat...",
+                "> Loading revisi bab 1-3...",
+                "> Mengunduh kesabaran ekstra...",
+                "> Menghapus trauma pertanyaan 'Apa urgensi penelitian anda?'...",
+                "> Hampir siap..."
+            ];
+
+            for (let i = 0; i < logs.length; i++) {
+                const p = document.createElement('div');
+                p.innerText = logs[i];
+                consoleBox.appendChild(p);
+                fill.style.width = ((i + 1) / logs.length) * 100 + "%";
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+                await new Promise(r => setTimeout(r, 1200));
+            }
+            status.innerText = "YAY! SELESAI!";
+            setTimeout(finalStep, 800);
+        }
+
+        async function finalStep() {
+            await Swal.fire({
+                title: 'CONGRATS HARITSA! 🌸',
+                html: `Selamat ya <b>Haritsa Putri Azzahra</b> atas Sempro-nya!<br>Lolos itu pasti, revisi itu seni! Semangat ya!`,
+                imageUrl: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp5dzRnbG9xbm9pYmRwaGp0Z3Z4ZzRyeHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7527pa7qs9kCG78A/giphy.gif',
+                imageWidth: 300,
+                confirmButtonText: 'Aku Siap Revisi! (Bohong)',
+                confirmButtonColor: '#f4acb7'
+            });
+
+            for(let i=0; i<3; i++) {
+                await Swal.fire({
+                    title: 'ALERT!',
+                    text: 'Dosen penguji menelpon, katanya ada revisi tambahan di halaman ' + Math.floor(Math.random()*100),
+                    icon: 'warning',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+            Swal.fire('Canda! WKWK. Selamat istirahat Cantik! ✨');
+        }
+
+        // Falling Flowers
+        setInterval(() => {
+            const f = document.createElement('div');
+            f.className = 'flower';
+            f.innerText = ['🌸', '🌺', '🌷', '🌹', '✨', '🎓'][Math.floor(Math.random()*6)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.fontSize = Math.random() * 20 + 20 + 'px';
+            f.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 7000);
+        }, 400);
+    </script>
+</body>
+</html>
